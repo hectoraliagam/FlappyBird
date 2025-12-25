@@ -108,11 +108,18 @@ void Game::render()
 {
   window.clear();
 
+  // Fondo
   if (background)
     window.draw(*background);
 
-  window.draw(parallax);
+  // Mundo
+  parallax.drawBases(window, sf::RenderStates::Default);
+  parallax.drawObstacles(window, sf::RenderStates::Default);
+
+  // Personaje
   window.draw(bird);
+
+  // UI
   window.draw(uiSound);
 
   window.display();
@@ -120,8 +127,8 @@ void Game::render()
 
 void Game::reset()
 {
-  bird = Bird(Config::BIRD_START_X, Config::BIRD_START_Y);
-  parallax = Parallax();
+  bird.reset(Config::BIRD_START_X, Config::BIRD_START_Y);
+  parallax.reset();
   uiSound.initiate(false);
   state = GameState::Waiting;
 }
