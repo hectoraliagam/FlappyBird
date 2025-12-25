@@ -16,32 +16,31 @@ public:
   bool isAlive() const;
   sf::Vector2f getPosition() const;
 
-protected:
-  void draw(sf::RenderTarget &target, sf::RenderStates states) const override;
-
 private:
   void animate();
+  void draw(sf::RenderTarget &target,
+            sf::RenderStates states) const override;
 
 private:
   enum class AnimationState
   {
-    Up,
-    Mid,
-    Down
+    Up = 0,
+    Mid = 1,
+    Down = 2
   };
 
-  bool initiated{false};
-  bool alive{true};
+  // ===== Estado =====
+  bool initiated = false;
+  bool alive = true;
 
-  AnimationState state{AnimationState::Up};
-  int animationTimer{10};
+  // ===== Animación =====
+  AnimationState state = AnimationState::Up;
+  int animationTimer = 0;
 
+  // ===== Física =====
+  float velocity = 0.f;
+
+  // ===== Gráficos =====
   std::vector<sf::Texture> textures;
   sf::Sprite sprite;
-
-  float velocity{0.f};
-
-  static constexpr float Gravity = 0.5f;
-  static constexpr float JumpForce = -8.f;
-  static constexpr float RotationSpeed = 4.f;
 };
