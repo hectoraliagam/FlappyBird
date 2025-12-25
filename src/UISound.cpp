@@ -3,17 +3,26 @@
 
 #include <fstream>
 #include <iostream>
+#include <string>
 
 void UISound::centerText(sf::Text &text)
 {
   auto bounds = text.getLocalBounds();
-  text.setOrigin({bounds.size.x / 2.f, bounds.size.y / 2.f});
+  text.setOrigin(
+      {bounds.position.x + bounds.size.x / 2.f,
+       bounds.position.y + bounds.size.y / 2.f});
 }
 
 UISound::UISound()
+    : scoreText(font),
+      maxScoreText(font),
+      pointSound(pointBuffer),
+      wingSound(wingBuffer),
+      hitSound(hitBuffer)
 {
   // ===== Font =====
-  if (!font.openFromFile(std::string(Config::ASSETS_PATH) + "font/font.ttf"))
+  if (!font.openFromFile(
+          std::string(Config::ASSETS_PATH) + "font/font.ttf"))
     std::cerr << "Error cargando font.ttf\n";
 
   // ===== Text =====
@@ -30,38 +39,47 @@ UISound::UISound()
   loadMaxScore();
 
   // ===== Textures =====
-  gameOverTexture.loadFromFile(
-      std::string(Config::ASSETS_PATH) + "sprites/gameover.png");
-  initTexture.loadFromFile(
-      std::string(Config::ASSETS_PATH) + "sprites/message.png");
+  if (!gameOverTexture.loadFromFile(
+          std::string(Config::ASSETS_PATH) + "sprites/gameover.png"))
+    std::cerr << "Error cargando gameover.png\n";
+
+  if (!initTexture.loadFromFile(
+          std::string(Config::ASSETS_PATH) + "sprites/message.png"))
+    std::cerr << "Error cargando message.png\n";
 
   gameOverSprite.setTexture(gameOverTexture);
   gameOverSprite.setScale({Config::GAME_OVER_SCALE, Config::GAME_OVER_SCALE});
   gameOverSprite.setPosition({Config::UI_CENTER_X, Config::GAME_OVER_Y});
-  gameOverSprite.setOrigin({gameOverTexture.getSize().x / 2.f,
-                            gameOverTexture.getSize().y / 2.f});
+  gameOverSprite.setOrigin(
+      {gameOverTexture.getSize().x / 2.f,
+       gameOverTexture.getSize().y / 2.f});
 
   initSprite.setTexture(initTexture);
   initSprite.setScale({Config::INIT_MESSAGE_SCALE, Config::INIT_MESSAGE_SCALE});
   initSprite.setPosition({Config::UI_CENTER_X, Config::INIT_MESSAGE_Y});
-  initSprite.setOrigin({initTexture.getSize().x / 2.f,
-                        initTexture.getSize().y / 2.f});
+  initSprite.setOrigin(
+      {initTexture.getSize().x / 2.f,
+       initTexture.getSize().y / 2.f});
 
   // ===== Sounds =====
-  pointBuffer.loadFromFile(
-      std::string(Config::ASSETS_PATH) + "sounds/point.ogg");
-  wingBuffer.loadFromFile(
-      std::string(Config::ASSETS_PATH) + "sounds/wing.ogg");
-  hitBuffer.loadFromFile(
-      std::string(Config::ASSETS_PATH) + "sounds/hit.ogg");
+  if (!pointBuffer.loadFromFile(
+          std::string(Config::ASSETS_PATH) + "sounds/point.ogg"))
+    std::cerr << "Error cargando point.ogg\n";
 
-  pointSound.setBuffer(pointBuffer);
-  wingSound.setBuffer(wingBuffer);
-  hitSound.setBuffer(hitBuffer);
+  if (!wingBuffer.loadFromFile(
+          std::string(Config::ASSETS_PATH) + "sounds/wing.ogg"))
+    std::cerr << "Error cargando wing.ogg\n";
 
-  music.openFromFile(
-      std::string(Config::ASSETS_PATH) + "sounds/music.ogg");
-  music.setLoop(true);
+  if (!hitBuffer.loadFromFile(
+          std::string(Config::ASSETS_PATH) + "sounds/hit.ogg"))
+    std::cerr << "Error cargando hit.ogg\n";
+
+  // ===== Music =====
+  if (!music.openFromFile(
+          std::string(Config::ASSETS_PATH) + "sounds/music.ogg"))
+    std::cerr << "Error cargando music.ogg\n";
+
+  music.setLooping(true);
   music.play();
 }
 
@@ -124,8 +142,9 @@ void UISound::gameOver()
   isGameOver = true;
 }
 
-void UISound::draw(sf::RenderTarget &target,
-                   sf::RenderStates states) const
+void UISound::draw(
+    sf::RenderTarget &target,
+    sf::RenderStates states) const
 {
   if (!initiated)
   {
