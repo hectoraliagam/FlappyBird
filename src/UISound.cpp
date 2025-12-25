@@ -21,66 +21,65 @@ UISound::UISound()
       hitSound(hitBuffer)
 {
   // ===== Font =====
-  if (!font.openFromFile(
-          std::string(Config::ASSETS_PATH) + "font/font.ttf"))
+  if (!font.openFromFile(std::string(Config::ASSETS_PATH) + "font/font.ttf"))
     std::cerr << "Error cargando font.ttf\n";
 
-  // ===== Text =====
-  scoreText.setFont(font);
+  // ===== Score Text =====
   scoreText.setCharacterSize(Config::SCORE_FONT_SIZE);
-  scoreText.setPosition({Config::UI_CENTER_X, Config::SCORE_Y});
   scoreText.setString("0");
+  scoreText.setPosition({Config::UI_CENTER_X, Config::SCORE_Y});
   centerText(scoreText);
 
-  maxScoreText.setFont(font);
+  // ===== Max Score Text =====
   maxScoreText.setCharacterSize(Config::MAX_SCORE_FONT_SIZE);
   maxScoreText.setPosition({Config::UI_CENTER_X, Config::MAX_SCORE_Y});
-
   loadMaxScore();
 
-  // ===== Textures =====
-  if (!gameOverTexture.loadFromFile(
-          std::string(Config::ASSETS_PATH) + "sprites/gameover.png"))
+  // ===== Textures y Sprites =====
+  if (!gameOverTexture.loadFromFile(std::string(Config::ASSETS_PATH) + "sprites/gameover.png"))
     std::cerr << "Error cargando gameover.png\n";
+  else
+    gameOverSprite.emplace(gameOverTexture);
 
-  if (!initTexture.loadFromFile(
-          std::string(Config::ASSETS_PATH) + "sprites/message.png"))
+  if (!initTexture.loadFromFile(std::string(Config::ASSETS_PATH) + "sprites/message.png"))
     std::cerr << "Error cargando message.png\n";
+  else
+    initSprite.emplace(initTexture);
 
-  gameOverSprite.setTexture(gameOverTexture);
-  gameOverSprite.setScale({Config::GAME_OVER_SCALE, Config::GAME_OVER_SCALE});
-  gameOverSprite.setPosition({Config::UI_CENTER_X, Config::GAME_OVER_Y});
-  gameOverSprite.setOrigin(
-      {gameOverTexture.getSize().x / 2.f,
-       gameOverTexture.getSize().y / 2.f});
+  if (gameOverSprite)
+  {
+    gameOverSprite->setScale({Config::GAME_OVER_SCALE, Config::GAME_OVER_SCALE});
+    gameOverSprite->setOrigin(
+        {gameOverTexture.getSize().x / 2.f,
+         gameOverTexture.getSize().y / 2.f});
+    gameOverSprite->setPosition({Config::UI_CENTER_X, Config::GAME_OVER_Y});
+  }
 
-  initSprite.setTexture(initTexture);
-  initSprite.setScale({Config::INIT_MESSAGE_SCALE, Config::INIT_MESSAGE_SCALE});
-  initSprite.setPosition({Config::UI_CENTER_X, Config::INIT_MESSAGE_Y});
-  initSprite.setOrigin(
-      {initTexture.getSize().x / 2.f,
-       initTexture.getSize().y / 2.f});
+  if (initSprite)
+  {
+    initSprite->setScale({Config::INIT_MESSAGE_SCALE, Config::INIT_MESSAGE_SCALE});
+    initSprite->setOrigin(
+        {initTexture.getSize().x / 2.f,
+         initTexture.getSize().y / 2.f});
+    initSprite->setPosition({Config::UI_CENTER_X, Config::INIT_MESSAGE_Y});
+  }
 
   // ===== Sounds =====
-  if (!pointBuffer.loadFromFile(
-          std::string(Config::ASSETS_PATH) + "sounds/point.ogg"))
+  if (!pointBuffer.loadFromFile(std::string(Config::ASSETS_PATH) + "sounds/point.ogg"))
     std::cerr << "Error cargando point.ogg\n";
 
-  if (!wingBuffer.loadFromFile(
-          std::string(Config::ASSETS_PATH) + "sounds/wing.ogg"))
+  if (!wingBuffer.loadFromFile(std::string(Config::ASSETS_PATH) + "sounds/wing.ogg"))
     std::cerr << "Error cargando wing.ogg\n";
 
-  if (!hitBuffer.loadFromFile(
-          std::string(Config::ASSETS_PATH) + "sounds/hit.ogg"))
+  if (!hitBuffer.loadFromFile(std::string(Config::ASSETS_PATH) + "sounds/hit.ogg"))
     std::cerr << "Error cargando hit.ogg\n";
 
   // ===== Music =====
-  if (!music.openFromFile(
-          std::string(Config::ASSETS_PATH) + "sounds/music.ogg"))
-    std::cerr << "Error cargando music.ogg\n";
-
-  music.setLooping(true);
-  music.play();
+  if (music.openFromFile(std::string(Config::ASSETS_PATH) + "sounds/music.ogg"))
+  {
+    music.setLooping(true);
+    music.play();
+  }
 }
 
 void UISound::loadMaxScore()
@@ -142,19 +141,21 @@ void UISound::gameOver()
   isGameOver = true;
 }
 
-void UISound::draw(
-    sf::RenderTarget &target,
-    sf::RenderStates states) const
+void UISound::draw(sf::RenderTarget &target, sf::RenderStates states) const
 {
   if (!initiated)
   {
-    target.draw(initSprite, states);
+    if (initSprite)
+      target.draw(*initSprite, states);
     return;
   }
 
   target.draw(scoreText, states);
-  target.draw(maxScoreText, states);
 
   if (isGameOver)
-    target.draw(gameOverSprite, states);
+  {
+    if (gameOverSprite)
+      target.draw(*gameOverSprite, states);
+    target.draw(maxScoreText, states);
+  }
 }
