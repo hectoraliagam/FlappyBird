@@ -2,6 +2,7 @@
 
 #include <SFML/Graphics.hpp>
 #include <vector>
+
 #include "Obstacle.hpp"
 
 class Parallax : public sf::Drawable
