@@ -5,7 +5,8 @@
 #include <string>
 
 Bird::Bird(float x, float y)
-    : textures(3)
+    : textures(3),
+      sprite(textures[0])
 {
   if (!textures[0].loadFromFile(
           std::string(Config::ASSETS_PATH) + "sprites/birdupflap.png"))
@@ -19,8 +20,6 @@ Bird::Bird(float x, float y)
           std::string(Config::ASSETS_PATH) + "sprites/birddownflap.png"))
     std::cerr << "Error cargando birddownflap.png\n";
 
-  sprite.setTexture(textures[0]);
-
   sprite.setOrigin({textures[0].getSize().x / 2.f,
                     textures[0].getSize().y / 2.f});
 
@@ -30,6 +29,7 @@ Bird::Bird(float x, float y)
 
 void Bird::update()
 {
+  // ===== Caída cuando muere =====
   if (!alive)
   {
     if (sprite.getPosition().y <
@@ -46,6 +46,7 @@ void Bird::update()
   if (!initiated)
     return;
 
+  // ===== Física =====
   sprite.move({0.f, velocity});
   velocity += Config::BIRD_GRAVITY;
 
@@ -62,7 +63,7 @@ void Bird::animate()
 
   if (animationTimer <= 0)
   {
-    int next =
+    const int next =
         (static_cast<int>(state) + 1) %
         static_cast<int>(textures.size());
 
@@ -78,6 +79,9 @@ void Bird::animate()
 
 void Bird::jump()
 {
+  if (!alive || !initiated)
+    return;
+
   velocity = Config::BIRD_JUMP_FORCE;
   sprite.setRotation(sf::degrees(Config::BIRD_JUMP_ROTATION));
 }
