@@ -25,4 +25,20 @@ namespace Config
 
   // ===== Ground =====
   inline constexpr int GROUND_HEIGHT = 136;
+
+  // ===== Parallax =====
+  inline constexpr float BASE_SPEED = 2.5f;
+  inline constexpr float BASE_SCALE = 1.5f;
+  inline constexpr float BASE_WIDTH = 336.f;
+  inline constexpr float GROUND_Y = WINDOW_HEIGHT - 112.f;
+
+  // ===== Pipes =====
+  inline constexpr float PIPE_SPACING = 350.f;
+  inline constexpr float PIPE_START_X_1 = 500.f;
+  inline constexpr float PIPE_START_X_2 = 850.f;
+  inline constexpr float PIPE_DESPAWN_X = -100.f;
+  inline constexpr float PIPE_SCORE_X = 100.f;
+
+  inline constexpr int PIPE_MIN_Y = 100;
+  inline constexpr int PIPE_RANDOM_RANGE = 250;
 }
