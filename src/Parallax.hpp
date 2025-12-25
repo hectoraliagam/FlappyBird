@@ -5,7 +5,7 @@
 
 #include "Obstacle.hpp"
 
-class Parallax : public sf::Drawable
+class Parallax
 {
 public:
   Parallax();
@@ -13,16 +13,17 @@ public:
   void update();
   bool checkCollision(const sf::IntRect &rect) const;
   void initiate();
+  void reset();
 
   int getScore() const;
+
+  void drawObstacles(sf::RenderTarget &target, sf::RenderStates states) const;
+  void drawBases(sf::RenderTarget &target, sf::RenderStates states) const;
 
 private:
   void updateBases();
   void updateObstacles();
   int randomPipeHeight() const;
-
-  void draw(sf::RenderTarget &target,
-            sf::RenderStates states) const override;
 
 private:
   bool initiated = false;
