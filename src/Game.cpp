@@ -55,15 +55,17 @@ void Game::processEvents()
         state = GameState::Playing;
         bird.initiate();
         parallax.initiate();
-        uiSound.Initiated(true);
+        uiSound.initiate(true);
       }
       else if (state == GameState::Playing)
       {
         bird.jump();
-        uiSound.Wing();
+        uiSound.wing();
       }
       else if (state == GameState::GameOver)
+      {
         reset();
+      }
     }
 
     if (!sf::Mouse::isButtonPressed(sf::Mouse::Button::Left))
@@ -91,11 +93,11 @@ void Game::update()
         bird.getPosition().y > Config::WINDOW_HEIGHT - Config::GROUND_HEIGHT)
     {
       bird.die();
-      uiSound.GameOver();
+      uiSound.gameOver();
       state = GameState::GameOver;
     }
 
-    uiSound.SetScore(parallax.getScore());
+    uiSound.setScore(parallax.getScore());
   }
 
   if (state == GameState::GameOver)
@@ -105,18 +107,21 @@ void Game::update()
 void Game::render()
 {
   window.clear();
+
   if (background)
     window.draw(*background);
+
   window.draw(parallax);
   window.draw(bird);
   window.draw(uiSound);
+
   window.display();
 }
 
 void Game::reset()
 {
   bird = Bird(Config::BIRD_START_X, Config::BIRD_START_Y);
-  parallax.reset();
-  uiSound.Initiated(false);
+  parallax = Parallax();
+  uiSound.initiate(false);
   state = GameState::Waiting;
 }
