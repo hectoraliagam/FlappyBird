@@ -3,6 +3,8 @@
 #include <SFML/Graphics.hpp>
 #include <SFML/Audio.hpp>
 
+#include <optional>
+
 class UISound : public sf::Drawable
 {
 public:
@@ -14,8 +16,9 @@ public:
   void wing();
 
 private:
-  void draw(sf::RenderTarget &target,
-            sf::RenderStates states) const override;
+  void draw(
+      sf::RenderTarget &target,
+      sf::RenderStates states) const override;
 
   void centerText(sf::Text &text);
   void loadMaxScore();
@@ -35,14 +38,15 @@ private:
 
   // ===== UI =====
   sf::Font font;
+
   sf::Text scoreText;
   sf::Text maxScoreText;
 
   sf::Texture gameOverTexture;
-  sf::Sprite gameOverSprite{gameOverTexture};
-
   sf::Texture initTexture;
-  sf::Sprite initSprite{initTexture};
+
+  std::optional<sf::Sprite> gameOverSprite;
+  std::optional<sf::Sprite> initSprite;
 
   // ===== State =====
   int score = 0;
