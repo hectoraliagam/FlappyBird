@@ -1,29 +1,43 @@
 #include "Bird.hpp"
-#include <iostream>
+#include "Config.hpp"
 
-Bird::Bird(float x, float y) : textures(3), sprite(textures[0])
+#include <iostream>
+#include <string>
+
+Bird::Bird(float x, float y)
+    : textures(3)
 {
-  if (!textures[0].loadFromFile("../resources/sprites/birdupflap.png"))
+  if (!textures[0].loadFromFile(
+          std::string(Config::ASSETS_PATH) + "sprites/birdupflap.png"))
     std::cerr << "Error cargando birdupflap.png\n";
 
-  if (!textures[1].loadFromFile("../resources/sprites/birdmidflap.png"))
+  if (!textures[1].loadFromFile(
+          std::string(Config::ASSETS_PATH) + "sprites/birdmidflap.png"))
     std::cerr << "Error cargando birdmidflap.png\n";
 
-  if (!textures[2].loadFromFile("../resources/sprites/birddownflap.png"))
+  if (!textures[2].loadFromFile(
+          std::string(Config::ASSETS_PATH) + "sprites/birddownflap.png"))
     std::cerr << "Error cargando birddownflap.png\n";
 
-  sprite.setOrigin({sprite.getTexture().getSize().x / 2.f, sprite.getTexture().getSize().y / 2.f});
+  sprite.setTexture(textures[0]);
+
+  sprite.setOrigin({textures[0].getSize().x / 2.f,
+                    textures[0].getSize().y / 2.f});
 
   sprite.setPosition({x, y});
-  sprite.setScale({2.f, 2.f});
+  sprite.setScale({Config::BIRD_SCALE, Config::BIRD_SCALE});
 }
 
 void Bird::update()
 {
   if (!alive)
   {
-    sprite.move({0.f, 12.f});
-    sprite.rotate(sf::degrees(10.f));
+    if (sprite.getPosition().y <
+        Config::WINDOW_HEIGHT - Config::GROUND_HEIGHT)
+    {
+      sprite.move({0.f, Config::BIRD_MAX_FALL_SPEED});
+      sprite.rotate(sf::degrees(Config::BIRD_DEAD_ROTATION));
+    }
     return;
   }
 
@@ -33,10 +47,13 @@ void Bird::update()
     return;
 
   sprite.move({0.f, velocity});
-  velocity += Gravity;
+  velocity += Config::BIRD_GRAVITY;
 
-  if (velocity > 8.f)
-    sprite.rotate(sf::degrees(RotationSpeed));
+  if (velocity > Config::BIRD_MAX_FALL_SPEED)
+    velocity = Config::BIRD_MAX_FALL_SPEED;
+
+  if (velocity > 0.f)
+    sprite.rotate(sf::degrees(Config::BIRD_ROTATION_SPEED));
 }
 
 void Bird::animate()
@@ -45,21 +62,24 @@ void Bird::animate()
 
   if (animationTimer <= 0)
   {
-    int next = (static_cast<int>(state) + 1) % textures.size();
-    state = static_cast<AnimationState>(next);
+    int next =
+        (static_cast<int>(state) + 1) %
+        static_cast<int>(textures.size());
 
+    state = static_cast<AnimationState>(next);
     sprite.setTexture(textures[next]);
 
-    sprite.setOrigin({sprite.getTexture().getSize().x / 2.f, sprite.getTexture().getSize().y / 2.f});
+    sprite.setOrigin({textures[next].getSize().x / 2.f,
+                      textures[next].getSize().y / 2.f});
 
-    animationTimer = 10;
+    animationTimer = Config::BIRD_ANIMATION_DELAY;
   }
 }
 
 void Bird::jump()
 {
-  velocity = JumpForce;
-  sprite.setRotation(sf::degrees(-15.f));
+  velocity = Config::BIRD_JUMP_FORCE;
+  sprite.setRotation(sf::degrees(Config::BIRD_JUMP_ROTATION));
 }
 
 void Bird::die()
@@ -82,7 +102,8 @@ sf::Vector2f Bird::getPosition() const
   return sprite.getPosition();
 }
 
-void Bird::draw(sf::RenderTarget &target, sf::RenderStates states) const
+void Bird::draw(sf::RenderTarget &target,
+                sf::RenderStates states) const
 {
   target.draw(sprite, states);
 }
