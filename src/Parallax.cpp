@@ -15,6 +15,8 @@ Parallax::Parallax()
           std::string(Config::ASSETS_PATH) + "sprites/base.png"))
     std::cerr << "Error cargando base.png\n";
 
+  reset();
+
   // ===== Bases =====
   sf::Sprite base(baseTexture);
   base.setScale({Config::BASE_SCALE, Config::BASE_SCALE});
@@ -125,12 +127,50 @@ int Parallax::randomPipeHeight() const
          std::rand() % Config::PIPE_RANDOM_RANGE;
 }
 
-void Parallax::draw(sf::RenderTarget &target,
-                    sf::RenderStates states) const
+void Parallax::drawObstacles(
+    sf::RenderTarget &target,
+    sf::RenderStates states) const
 {
   for (const auto &obstacle : obstacles)
     target.draw(obstacle, states);
+}
 
+void Parallax::drawBases(
+    sf::RenderTarget &target,
+    sf::RenderStates states) const
+{
   for (const auto &base : bases)
     target.draw(base, states);
+}
+
+void Parallax::reset()
+{
+  initiated = false;
+  score = 0;
+  lastPassedIndex = -1;
+
+  bases.clear();
+  obstacles.clear();
+
+  // ===== Bases =====
+  sf::Sprite base(baseTexture);
+  base.setScale({Config::BASE_SCALE, Config::BASE_SCALE});
+  base.setPosition({0.f, Config::GROUND_Y});
+  bases.push_back(base);
+
+  base.setPosition(
+      {Config::BASE_WIDTH * Config::BASE_SCALE,
+       Config::GROUND_Y});
+  bases.push_back(base);
+
+  // ===== Obstáculos =====
+  obstacles.emplace_back(
+      obstacleTexture,
+      Config::PIPE_START_X_1,
+      randomPipeHeight());
+
+  obstacles.emplace_back(
+      obstacleTexture,
+      Config::PIPE_START_X_2,
+      randomPipeHeight());
 }
