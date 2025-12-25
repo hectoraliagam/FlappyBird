@@ -39,10 +39,10 @@ private:
   sf::Text maxScoreText;
 
   sf::Texture gameOverTexture;
-  sf::Sprite gameOverSprite;
+  sf::Sprite gameOverSprite{gameOverTexture};
 
   sf::Texture initTexture;
-  sf::Sprite initSprite;
+  sf::Sprite initSprite{initTexture};
 
   // ===== State =====
   int score = 0;
