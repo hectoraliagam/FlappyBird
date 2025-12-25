@@ -23,6 +23,20 @@ namespace Config
   inline constexpr int BIRD_COLLISION_X_OFFSET = 23;
   inline constexpr int BIRD_COLLISION_Y_OFFSET = 21;
 
+  // ===== Bird Physics =====
+  inline constexpr float BIRD_GRAVITY = 0.5f;
+  inline constexpr float BIRD_JUMP_FORCE = -8.f;
+  inline constexpr float BIRD_MAX_FALL_SPEED = 12.f;
+
+  // ===== Bird Animation =====
+  inline constexpr int BIRD_ANIMATION_DELAY = 10;
+
+  // ===== Bird Visual =====
+  inline constexpr float BIRD_SCALE = 2.f;
+  inline constexpr float BIRD_ROTATION_SPEED = 4.f;
+  inline constexpr float BIRD_JUMP_ROTATION = -15.f;
+  inline constexpr float BIRD_DEAD_ROTATION = 10.f;
+
   // ===== Ground =====
   inline constexpr int GROUND_HEIGHT = 136;
 
