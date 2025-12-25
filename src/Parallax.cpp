@@ -57,9 +57,9 @@ void Parallax::updateBases()
   {
     sf::Sprite newBase = bases.back();
     newBase.setPosition(
-        newBase.getPosition().x +
-            Config::BASE_WIDTH * Config::BASE_SCALE,
-        Config::GROUND_Y);
+        {newBase.getPosition().x +
+             Config::BASE_WIDTH * Config::BASE_SCALE,
+         Config::GROUND_Y});
 
     bases.push_back(newBase);
     bases.erase(bases.begin());
@@ -71,22 +71,24 @@ void Parallax::updateObstacles()
   for (auto &obstacle : obstacles)
     obstacle.update();
 
+  // ===== Score =====
   for (std::size_t i = 0; i < obstacles.size(); ++i)
   {
     if (obstacles[i].getPosition().x<Config::PIPE_SCORE_X &&static_cast<int>(i)> lastPassedIndex)
     {
       lastPassedIndex = static_cast<int>(i);
-      score++;
+      ++score;
     }
   }
 
+  // ===== Reciclado =====
   if (!obstacles.empty() &&
       obstacles.front().getPosition().x <= Config::PIPE_DESPAWN_X)
   {
     obstacles.erase(obstacles.begin());
-    lastPassedIndex--;
+    --lastPassedIndex;
 
-    float newX =
+    const float newX =
         obstacles.back().getPosition().x +
         Config::PIPE_SPACING;
 
