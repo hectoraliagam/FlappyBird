@@ -63,4 +63,23 @@ namespace Config
   inline constexpr int PIPE_COLLISION_WIDTH = 70;
   inline constexpr int PIPE_COLLISION_HEIGHT = 480;
   inline constexpr int PIPE_COLLISION_X_OFFSET = 4;
+
+  // ===== UI =====
+  inline constexpr float UI_CENTER_X = WINDOW_WIDTH / 2.f;
+
+  inline constexpr float SCORE_Y = 50.f;
+  inline constexpr float MAX_SCORE_Y = 100.f;
+
+  inline constexpr unsigned SCORE_FONT_SIZE = 40;
+  inline constexpr unsigned MAX_SCORE_FONT_SIZE = 20;
+
+  // ===== UI Sprites =====
+  inline constexpr float GAME_OVER_Y = 350.f;
+  inline constexpr float INIT_MESSAGE_Y = 280.f;
+
+  inline constexpr float GAME_OVER_SCALE = 2.f;
+  inline constexpr float INIT_MESSAGE_SCALE = 1.5f;
+
+  // ===== Files =====
+  inline constexpr const char *SCORE_FILE = "score";
 }
