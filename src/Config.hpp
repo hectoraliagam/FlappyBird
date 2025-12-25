@@ -55,4 +55,12 @@ namespace Config
 
   inline constexpr int PIPE_MIN_Y = 100;
   inline constexpr int PIPE_RANDOM_RANGE = 250;
+
+  // ===== Pipes (visual & gameplay) =====
+  inline constexpr float PIPE_GAP = 150.f;
+
+  // ===== Pipes (collision) =====
+  inline constexpr int PIPE_COLLISION_WIDTH = 70;
+  inline constexpr int PIPE_COLLISION_HEIGHT = 480;
+  inline constexpr int PIPE_COLLISION_X_OFFSET = 4;
 }
