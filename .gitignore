@@ -1,5 +1,4 @@
 /build/
 /bin/*.exe
 /bin/*.dll
-.vscode/
 score
