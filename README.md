@@ -24,18 +24,32 @@ Este proyecto está pensado como un **juego funcional**, una **base arquitectón
 ```
 project/
 ├── src/
+│   ├── Bird.cpp
+│   ├── Bird.hpp
+│   ├── Config.hpp
+│   ├── Game.cpp
+│   ├── Game.hpp
 │   ├── main.cpp
-│   └── (otros .cpp / .h del juego)
-├── build/
+│   ├── Obstacle.cpp
+│   ├── Obstacle.hpp
+│   ├── Parallax.cpp
+│   ├── Parallax.hpp
+│   ├── UISound.cpp
+│   └── UISound.hpp
 ├── bin/
 │   ├── app_debug.exe
 │   ├── app_release.exe
 │   ├── sfml-system-3.dll
 │   ├── sfml-window-3.dll
-│   └── sfml-graphics-3.dll
+│   ├── sfml-graphics-3.dll
+│   └── resources/
 ├── .vscode/
 │   ├── tasks.json
 │   └── c_cpp_properties.json
+├── resources/
+│   ├── font/
+│   ├── sounds/
+│   └── sprites/
 ├── README.md
 └── LICENSE
 ```
