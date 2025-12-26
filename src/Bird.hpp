@@ -12,14 +12,14 @@ public:
   void jump();
   void die();
   void initiate();
+  void reset(float x, float y);
 
   bool isAlive() const;
   sf::Vector2f getPosition() const;
 
 private:
   void animate();
-  void draw(sf::RenderTarget &target,
-            sf::RenderStates states) const override;
+  void draw(sf::RenderTarget &target, sf::RenderStates states) const override;
 
 private:
   enum class AnimationState
@@ -29,18 +29,13 @@ private:
     Down = 2
   };
 
-  // ===== Estado =====
   bool initiated = false;
   bool alive = true;
 
-  // ===== Animación =====
   AnimationState state = AnimationState::Up;
   int animationTimer = 0;
-
-  // ===== Física =====
   float velocity = 0.f;
 
-  // ===== Gráficos =====
   std::vector<sf::Texture> textures;
-  sf::Sprite sprite;
+  sf::Sprite *sprite;
 };
